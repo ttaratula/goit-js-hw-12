@@ -3,17 +3,19 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const gallery = document.querySelector(`.gallery`);
 let lightbox = new SimpleLightbox('.gallery a', {
-  captions: true, // Увімкнення підписів
-  captionsData: 'alt', // Брати підпис з атрибуту alt
+  captions: true,
+  captionsData: 'alt',
   captionDelay: 250,
 });
 
 export function clearGallery() {
-  gallery.innerHTML = ''; // Очищаємо контейнер перед рендерингом
+  gallery.innerHTML = '';
 }
 
-export function renderImages(images) {
-  clearGallery(); // Очищаємо перед додаванням нових картинок
+export function renderImages(images, clear = true) {
+  if (clear) {
+    clearGallery();
+  }
 
   const markup = images.map(
       ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => `
@@ -38,14 +40,14 @@ export function renderImages(images) {
           <li class="baner-li">
             <p class="baner-title">Downloads</p>
             <p class="baner-text">${downloads}</p>
-          
-            </li>
+          </li>
         </ul>
         </div>
       </li>`
     )
     .join('');
 
-    gallery.innerHTML = markup;
-    lightbox.refresh(); // Оновлюємо Lightbox після додавання нових зображень
+  gallery.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
 }
+
